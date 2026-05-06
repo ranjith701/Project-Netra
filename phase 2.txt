@@ -1,0 +1,19 @@
+what are the changes & improvement needed 
+
+1. build the UI for admin page
+
+2. Add the camera into front end like adding the cameras for entry and exit the collab the pair of cameras
+
+3. handle the multiple cameras
+
+4. align the database and web page (separate users)
+
+5. adding the feature extract the data based on the selection and share the attendance via mail or web page 
+
+6. improve the more accuracy to reorganization for unknown users 
+
+7. improve the data collection for unknown user and known  users
+
+
+
+

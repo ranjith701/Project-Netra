@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Netra Intelligence | Cloud Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body { background: #f4f7f6; font-family: 'Segoe UI', sans-serif; padding-top: 20px; }
+        .card-main { border-radius: 15px; border: none; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .status-inside { background: #d3f9d8; color: #2b8a3e; padding: 5px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; border: 1px solid #b2f2bb; }
+        .status-exit { font-weight: 700; color: #e03131; }
+        .integrity-badge { font-size: 0.75rem; letter-spacing: 0.5px; padding: 5px 10px; }
+        .table thead { background: #212529; color: white; }
+        .refresh-area { background: white; padding: 10px 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h2 class="fw-bold mb-0">📷 Netra <span class="text-primary">Intelligence</span></h2>
+        </div>
+        <div class="col-md-6 text-end">
+            <div class="refresh-area d-inline-flex align-items-center">
+                <div class="me-3">
+                    <div id="clock" class="fw-bold"></div>
+                    <small class="text-muted">Last Sync: {{ sync_time }}</small>
+                </div>
+                <button onclick="window.location.reload();" class="btn btn-primary shadow-sm">🔄 Refresh</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-main overflow-hidden">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Employee</th>
+                    <th>First Entry</th>
+                    {% if not entry_only_mode %} <th>Status</th> {% endif %}
+                    <th>Integrity</th>
+                    {% if not entry_only_mode %} <th>Work Time</th> {% endif %}
+                    <th class="text-center">Logs</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td class="ps-4">
+                        <div class="fw-bold">{{ r.name }}</div>
+                        <div class="small text-muted">{{ r.role }}</div>
+                    </td>
+                    <td><b>{{ r.first_entry }}</b></td>
+                    {% if not entry_only_mode %}
+                    <td>
+                        {% if r.status == "Here" %} <span class="status-inside">INSIDE</span>
+                        {% else %} <span class="status-exit">Left at {{ r.last_exit }}</span> {% endif %}
+                    </td>
+                    {% endif %}
+                    <td>
+                        {% if r.integrity_check == "Integrity" %}
+                            <span class="badge bg-success integrity-badge">INTEGRITY</span>
+                        {% elif r.integrity_check == "Out of Integrity" %}
+                            <span class="badge bg-danger integrity-badge">OUT OF INTEGRITY</span>
+                        {% else %}
+                            <span class="badge bg-secondary integrity-badge">PENDING</span>
+                        {% endif %}
+                    </td>
+                    {% if not entry_only_mode %} <td class="fw-bold text-primary">{{ r.work_duration }}</td> {% endif %}
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-dark px-3" data-bs-toggle="collapse" data-bs-target="#h-{{ r.id }}">Logs</button>
+                    </td>
+                </tr>
+                <tr class="collapse" id="h-{{ r.id }}">
+                    <td colspan="6" class="bg-light p-3">
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for e in r.history %}
+                            <div class="bg-white border rounded p-2 small shadow-sm">
+                                <span class="badge {{ 'bg-success' if e.type == 'Entry' else 'bg-danger' }}">{{ e.type }}</span> {{ e.time }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString(), 1000);
+</script>
+</body>
+</html>

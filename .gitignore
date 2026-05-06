@@ -1,0 +1,17 @@
+# Ignore the entire database folder and all subfolders (14, 15, etc.)
+database/
+
+# Ignore all unlabeled face captures
+unlabeled_faces/
+
+# Ignore the virtual environment completely
+venv310/
+
+# Ignore all Python bytecode/compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore local DB and config
+netra.db
+settings.json

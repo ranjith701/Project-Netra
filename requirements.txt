@@ -1,0 +1,9 @@
+flask>=2.2.5
+werkzeug>=2.2.3
+insightface==0.7.3
+onnxruntime>=1.13.1
+opencv-python>=4.8.0
+numpy<2
+pillow
+tk
+onnxruntime
